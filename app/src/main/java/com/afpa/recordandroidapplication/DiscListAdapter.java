@@ -84,7 +84,7 @@ public class DiscListAdapter extends BaseAdapter {
         }
 
         Disc disc = this.discs.get(positon);
-        holder.discTitle.setText("Title: " +disc.getTitle());
+        holder.discTitle.setText(disc.getTitle());
         holder.discLabel.setText("Label: " + disc.getLabel());
         holder.discYear.setText("Year: " + disc.getYear());
         holder.discGenre.setText("Genre: " + disc.getGenre());
