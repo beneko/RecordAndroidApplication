@@ -1,9 +1,10 @@
 <resources>
-    <string name="app_name">RecordAndroidApplication</string>
+    <string name="app_name">Record Android Application</string>
     <string name="disctitle">discTitle</string>
     <string name="artistname">artistName</string>
     <string name="discLabel">discLabel</string>
     <string name="discYear">discYear</string>
     <string name="discGenre">discGenre</string>
     <string name="details">Détails</string>
+    <string name="disc_image">disc image</string>
 </resources>

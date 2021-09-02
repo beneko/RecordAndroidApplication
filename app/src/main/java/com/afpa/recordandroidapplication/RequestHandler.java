@@ -1,38 +1,63 @@
 package com.afpa.recordandroidapplication;
 
-import android.content.Context;
+import android.util.Log;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.ProtocolException;
+import java.net.URL;
 
 public class RequestHandler {
-    private static RequestHandler instance;
-    private RequestQueue requestQueue;
-    private static Context ctx;
 
-    private RequestHandler(Context context) {
-        ctx = context;
-        requestQueue = getRequestQueue();
+    private static final String TAG = RequestHandler.class.getSimpleName();
+
+    public RequestHandler() {
     }
 
-    public static synchronized RequestHandler getInstance(Context context) {
-        if (instance == null) {
-            instance = new RequestHandler(context);
+    public String makeServiceCall(String reqUrl) {
+        String response = null;
+        try {
+            URL url = new URL(reqUrl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            // read the response
+            InputStream in = new BufferedInputStream(conn.getInputStream());
+            response = convertStreamToString(in);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "MalformedURLException: " + e.getMessage());
+        } catch (ProtocolException e) {
+            Log.e(TAG, "ProtocolException: " + e.getMessage());
+        } catch (IOException e) {
+            Log.e(TAG, "IOException: " + e.getMessage());
+        } catch (Exception e) {
+            Log.e(TAG, "Exception: " + e.getMessage());
         }
-        return instance;
+        return response;
     }
 
-    public RequestQueue getRequestQueue() {
-        if (requestQueue == null) {
-            // getApplicationContext() is key, it keeps you from leaking the
-            // Activity or BroadcastReceiver if someone passes one in.
-            requestQueue = Volley.newRequestQueue(ctx.getApplicationContext());
+    private String convertStreamToString(InputStream is) {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuilder sb = new StringBuilder();
+
+        String line;
+        try {
+            while ((line = reader.readLine()) != null) {
+                sb.append(line).append('\n');
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
-        return requestQueue;
-    }
-
-    public <T> void addToRequestQueue(Request<T> req) {
-        getRequestQueue().add(req);
+        return sb.toString();
     }
 }

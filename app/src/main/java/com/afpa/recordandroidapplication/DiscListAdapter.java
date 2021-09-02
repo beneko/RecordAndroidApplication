@@ -34,10 +34,18 @@ public class DiscListAdapter extends BaseAdapter {
         this.context = context;
     }
 
-    public int getDrawableResIdByName(String resName)  {
+//    public int getDrawableResIdByName(String resName)  {
+//        String pkgName = context.getPackageName();
+//        // Return 0 if not found.
+//        int resID = context.getResources().getIdentifier(resName , "drawable", pkgName);
+//        Log.i("unliste", "Res Name: "+ resName+"==> Res ID = "+ resID);
+//        return resID;
+//    }
+    public int getMipmapResIdByName(String resName)  {
         String pkgName = context.getPackageName();
         // Return 0 if not found.
-        int resID = context.getResources().getIdentifier(resName , "drawable", pkgName);
+        resName = resName.substring(0, resName.lastIndexOf('.'));
+        int resID = context.getResources().getIdentifier(resName , "mipmap", pkgName);
         Log.i("unliste", "Res Name: "+ resName+"==> Res ID = "+ resID);
         return resID;
     }
@@ -76,13 +84,13 @@ public class DiscListAdapter extends BaseAdapter {
         }
 
         Disc disc = this.discs.get(positon);
-        holder.discTitle.setText(disc.getTitle());
-        holder.discLabel.setText(disc.getLabel());
-        holder.discYear.setText(disc.getYear());
-        holder.discGenre.setText(disc.getGenre());
-        holder.artistName.setText(disc.getArtist());
+        holder.discTitle.setText("Title: " +disc.getTitle());
+        holder.discLabel.setText("Label: " + disc.getLabel());
+        holder.discYear.setText("Year: " + disc.getYear());
+        holder.discGenre.setText("Genre: " + disc.getGenre());
+        holder.artistName.setText("Artist: " + disc.getArtist());
 
-        int imageId = this.getDrawableResIdByName(disc.getPicture());
+        int imageId = this.getMipmapResIdByName(disc.getPicture());
 
         holder.discImage.setImageResource(imageId);
 
